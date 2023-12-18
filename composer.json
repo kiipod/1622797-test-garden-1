@@ -1,0 +1,20 @@
+{
+    "name": "kiipod/test-garden",
+    "description": "Test Project of Garden",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Kiipod\\TestGarden\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "kiipod",
+            "email": "iamkir90@hotmail.com"
+        }
+    ],
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.41"
+    }
+}
