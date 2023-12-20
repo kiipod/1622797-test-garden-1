@@ -1,20 +1,22 @@
 <?php
 
-namespace src\Fruit;
+declare(strict_types=1);
+
+namespace garden\Fruit;
 
 interface FruitInterface
 {
-    public function fall();
+    public function fall(): bool;
 
-    public function spoil();
+    public function spoil(): bool;
 
-    public function isSpoiled();
+    public function isSpoiled(): bool;
 
-    public function isFallen();
+    public function isFallen(): bool;
 
-    public function getAge();
+    public function getAge(): int;
 
-    public function getColor();
+    public function getColor(): string;
 
-    public function getSize();
+    public function getSize(): int;
 }

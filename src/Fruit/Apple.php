@@ -2,23 +2,25 @@
 
 declare(strict_types=1);
 
-namespace src\Fruit;
+namespace garden\Fruit;
 
 class Apple implements FruitInterface
 {
-    private int $age;
+    private const ONE_DAY = 24 * 60 * 60;
+    public int $age;
     private string $color;
     private int $size;
-    private int $spoiled;
-    private int $fallen;
+    private bool $spoiled;
+    private bool $fallen;
+    private int $fallenTimestamp;
 
     public function __construct()
     {
         $this->age = rand(0, 30);
         $this->color = $this->generateRandomColor();
         $this->size = rand(1, 5);
-        $this->spoiled = 0;
-        $this->fallen = 0;
+        $this->spoiled = false;
+        $this->fallen = false;
     }
 
     /**
@@ -35,29 +37,29 @@ class Apple implements FruitInterface
     /**
      * Метод устанавливает значение яблока на испортившееся
      *
-     * @return void
+     * @return bool
      */
-    public function fall(): void
+    public function fall(): bool
     {
-        $this->fallen = 1;
+        return $this->fallen = true;
     }
 
     /**
      * Метод устанавливает значение яблока на упавшее
      *
-     * @return void
+     * @return bool
      */
-    public function spoil(): void
+    public function spoil(): bool
     {
-        $this->spoiled = 1;
+        return $this->spoiled = true;
     }
 
     /**
      * Метод возвращает значение яблок как испортившееся
      *
-     * @return int
+     * @return bool
      */
-    public function isSpoiled(): int
+    public function isSpoiled(): bool
     {
         return $this->spoiled;
     }
@@ -65,15 +67,39 @@ class Apple implements FruitInterface
     /**
      * Метод возвращает значение яблок как упавшее
      *
-     * @return int
+     * @return bool
      */
-    public function isFallen(): int
+    public function isFallen(): bool
     {
         return $this->fallen;
     }
 
     /**
-     * Метод возвращает возраст яблок
+     * Метод устанавливает день когда яблоко упало
+     *
+     * @param int $timestamp
+     * @return void
+     */
+    public function setFallenTimestamp(int $timestamp): void
+    {
+        $this->fallenTimestamp = $timestamp;
+    }
+
+    /**
+     * Метод портит яблоко после прохождения суток
+     *
+     * @return void
+     */
+    public function spoilAfterFall(): void
+    {
+        if ($this->fallen &&
+            (time() - $this->fallenTimestamp) >= self::ONE_DAY) {
+            $this->spoiled = true;
+        }
+    }
+
+    /**
+     * Метод возвращает возраст яблока
      *
      * @return int
      */
