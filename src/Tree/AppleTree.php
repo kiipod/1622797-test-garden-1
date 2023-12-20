@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace src\Tree;
+namespace garden\Tree;
 
-use src\Fruit\Apple;
+use garden\Fruit\Apple;
 
 class AppleTree implements TreeInterface
 {
@@ -12,20 +12,10 @@ class AppleTree implements TreeInterface
 
     public function __construct()
     {
-        $numApples = rand(1, 10);
+        $numApples = rand(1, 100);
         for ($i = 0; $i < $numApples; $i++) {
             $this->apples[] = new Apple();
         }
-    }
-
-    /**
-     * Метод возвращается количество яблок на дереве
-     *
-     * @return array
-     */
-    public function getFruits(): array
-    {
-        return $this->apples;
     }
 
     /**
@@ -39,23 +29,60 @@ class AppleTree implements TreeInterface
     }
 
     /**
-     * Метод управляет ростом и падением яблок на дереве
+     * Метод управляет яблоками на деревьях
      *
      * @return void
      */
-    public function passDay(): void
+    public function controlFruit(): void
     {
+        $this->age += 1;
+
+        $this->addNewAppleEvery30Days();
+
         foreach ($this->apples as $apple) {
-            $apple->age();
-
-            if ($apple->getAge() == 30) {
-                $apple->fall();
-            }
-
-            if ($apple->isFallen() && !$apple->isSpoiled()) {
-                $apple->spoil();
-            }
+            $this->processApple($apple);
         }
+    }
+
+    /**
+     * Метод отвечает за создание новых яблок на дереве, через 30 дней
+     *
+     * @return void
+     */
+    private function addNewAppleEvery30Days(): void
+    {
+        if ($this->age % 30 === 0) {
+            $this->addFruit();
+        }
+    }
+
+    /**
+     * Метод отвечает за процесс роста и старения яблока
+     *
+     * @param Apple $apple
+     * @return void
+     */
+    private function processApple(Apple $apple): void
+    {
+        $apple->age += 1;
+
+        if ($apple->age >= 30) {
+            $this->handleAgedApple($apple);
+        }
+
+        $apple->spoilAfterFall();
+    }
+
+    /**
+     * Метод отвечает за падение яблока
+     *
+     * @param Apple $apple
+     * @return void
+     */
+    private function handleAgedApple(Apple $apple): void
+    {
+        $apple->fall();
+        $apple->setFallenTimestamp(time());
     }
 
     /**
@@ -63,7 +90,7 @@ class AppleTree implements TreeInterface
      *
      * @return int
      */
-    public function getCountApples(): int
+    public function getCountFruit(): int
     {
         $count = 0;
         foreach ($this->apples as $apple) {
