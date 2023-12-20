@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace src;
+namespace garden;
 
-use src\Tree\AppleTree;
+use garden\Tree\AppleTree;
+use garden\Tree\TreeInterface;
 
 class Garden
 {
@@ -24,7 +25,7 @@ class Garden
     }
 
     /**
-     * Метод отвечает за просчет времени жизни сада
+     * Метод отвечает за прохождение суток жизни сада
      *
      * @return void
      */
@@ -33,22 +34,54 @@ class Garden
         $this->age++;
 
         foreach ($this->trees as $tree) {
-            $tree->passDay();
+            $tree->controlFruit();
         }
     }
 
     /**
-     * Метод отвечает за просчет количество плодов на всех деревьях
+     * Метод отвечает за подсчет пройденных дней
      *
      * @return int
      */
-    public function getCountFruits(): int
+    public function getPassedDays(): int
     {
-        $count = 0;
-        foreach ($this->trees as $tree) {
-            $count += $tree->getCountApples();
+        return $this->age;
+    }
+
+    /**
+     * Метод отвечает за добавление дерева в сад
+     *
+     * @param TreeInterface $tree
+     * @return void
+     */
+    public function addTree(TreeInterface $tree): void
+    {
+        $this->trees[] = $tree;
+    }
+
+    /**
+     * Метод отвечает за просчет количества деревьев в саду
+     *
+     * @return int
+     */
+    public function getCountTrees(): int
+    {
+        return count($this->trees);
+    }
+
+    /**
+     * Метод отвечает за просчет количество яблок на одном дереве
+     *
+     * @return array
+     */
+    public function getCountFruitsOnTree(): array
+    {
+        $countFruitOnTree = [];
+
+        foreach ($this->trees as $index => $tree) {
+            $countFruitOnTree[$index + 1] = $tree->getCountFruit();
         }
 
-        return $count;
+        return $countFruitOnTree;
     }
 }
